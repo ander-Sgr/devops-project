@@ -2,9 +2,13 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-COPY . /app/
+#avoid gen filpes pyc and output stdout stdrr
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
+# install dependencies
 RUN pip install --upgrade pip
+COPY ./requirements.txt /app
 RUN pip install -r requirements.txt
 
-CMD [ "python", "run.py" ]
+COPY . /app/

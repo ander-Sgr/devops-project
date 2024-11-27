@@ -1,20 +1,36 @@
-version: "3.8"
+name: local_env
+
 services:
   app:
     build: .
+    image: envdev:latest
+    command: python run.py
     ports:
-      - "5000:5000"
+      - "5001:5000"
     environment:
       - FLASK_ENV=development
-      - DATABASE_URI=postgresql://myuser:mypassword@db:5432/mydatabase
+      - DATABASE_URI=postgresql://dev_user:envdev@db_postgres:5432/local_dev_db
     depends_on:
-      - db
+      - db_postgres
+    networks:
+      - local_dev_network
 
-  db:
-    image: postgres:13
-    environment:
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: mypassword
-      POSTGRES_DB: mydatabase
+  db_postgres:
+    image: postgres:15
     ports:
       - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=dev_user
+      - POSTGRES_PASSWORD=envdev
+      - POSTGRES_DB=local_dev_db
+    networks:
+      - local_dev_network
+
+networks:
+  local_dev_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
