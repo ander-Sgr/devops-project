@@ -5,6 +5,8 @@ services:
     build: .
     image: envdev:latest
     command: python run.py
+    volumes:
+      - .:/app
     ports:
       - "5001:5000"
     environment:
