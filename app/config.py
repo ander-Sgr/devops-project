@@ -15,6 +15,12 @@ class Config:
 class DevelopmentConfig(Config):
     DEBUG = True
 
+class TestingConfig(Config):
+    TESTING = True
+    DEBUG = True
+    # config a database for testing
+    SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URI')
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 class ProductionConfig(Config):
     DEBUG = False
@@ -26,4 +32,5 @@ config_dict = {
     "development": DevelopmentConfig,
     "production": ProductionConfig,
     # Add other environments if needed
+    'testing': TestingConfig,
 }
