@@ -30,9 +30,24 @@ services:
     networks:
       - local_dev_network
 
+  env_test:
+    build: .
+    image: envdev:latest
+    volumes:
+      - .:/app
+      - coverage_data:/app/htmlcov
+    environment:
+      - FLASK_ENV=testing
+      - DATABASE_URI=postgresql://dev_user:envdev@db_postgres:5432/test_db
+    depends_on:
+      - db_postgres
+    networks:
+      - local_dev_network
+
 networks:
   local_dev_network:
     driver: bridge
 
 volumes:
   postgres_data:
+  coverage_data:
