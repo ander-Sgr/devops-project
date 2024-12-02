@@ -36,7 +36,6 @@ services:
     image: envdev:latest
     command: /bin/bash -c "python -m http.server 8000 --directory /app/htmlcov"    
     ports:
-      - "5002:5000"
       - "8000:8000"
     volumes:
       - .:/app
