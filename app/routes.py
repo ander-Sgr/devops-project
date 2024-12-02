@@ -16,7 +16,7 @@ def insert_data():
 
     db.session.add(new_data)
     db.session.commit()
-    return jsonify({"message": "Data inserted successfully"})
+    return jsonify({"message": "Data inserted successfully"}), 201
 
 
 @data_routes.route("/data", methods=["GET"])
