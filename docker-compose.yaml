@@ -13,7 +13,8 @@ services:
       - FLASK_ENV=development
       - DATABASE_URI=postgresql://dev_user:envdev@db_postgres:5432/local_dev_db
     depends_on:
-      - db_postgres
+      db_postgres:
+        condition: service_healthy
     networks:
       - local_dev_network
 
@@ -24,11 +25,16 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/      
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
-
     environment:
       - POSTGRES_USER=dev_user
       - POSTGRES_PASSWORD=envdev
       - POSTGRES_DB=local_dev_db
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $(POSTGRES_USER)"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - local_dev_network
 
@@ -44,7 +50,8 @@ services:
       - FLASK_ENV=testing
       - DATABASE_URI=postgresql://dev_user:envdev@db_postgres:5432/test_db
     depends_on:
-      - db_postgres
+      db_postgres:
+        condition: service_healthy
     networks:
       - local_dev_network
 
