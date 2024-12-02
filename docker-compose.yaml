@@ -22,7 +22,9 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - postgres_data:/var/lib/postgresql/data/      
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
     environment:
       - POSTGRES_USER=dev_user
       - POSTGRES_PASSWORD=envdev
@@ -31,8 +33,11 @@ services:
       - local_dev_network
 
   env_test:
-    build: .
     image: envdev:latest
+    command: /bin/bash -c "python -m http.server 8000 --directory /app/htmlcov"    
+    ports:
+      - "5002:5000"
+      - "8000:8000"
     volumes:
       - .:/app
       - coverage_data:/app/htmlcov
