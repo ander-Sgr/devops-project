@@ -24,14 +24,13 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data/      
-      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     environment:
       - POSTGRES_USER=dev_user
       - POSTGRES_PASSWORD=envdev
       - POSTGRES_DB=local_dev_db
     restart: always
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U dev_user"]
+      test: ["CMD-SHELL", "pg_isready -U dev_user -d local_dev_db || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -48,7 +47,6 @@ services:
       - coverage_data:/app/htmlcov
     environment:
       - FLASK_ENV=testing
-      - DATABASE_URI=postgresql://dev_user:envdev@db_postgres:5432/test_db
     depends_on:
       db_postgres:
         condition: service_healthy
