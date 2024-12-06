@@ -1,11 +1,18 @@
 pipeline {
     agent any
 
-
     stages {
-        stage('Checkout') {
+        stage('Checkout from scm') {
             steps {
-                git 'https://github.com/ander-Sgr/devops-project.git'
+                 checkout scm 
+            }
+        }
+        stage('Ejecución de tests') {
+            steps {
+                script {
+                    sh 'pip install -r requirements-test.txt'
+                    sh 'pytest --cov=app --cov-report=term-missing'
+                }
             }
         }
     }
