@@ -10,7 +10,8 @@ pipeline {
         stage('Construir y correr el servicio de prueba') {
             steps {
                 script {
-                    sh 'make tests'
+                    sh 'docker-compose up -d --build env_test'
+                    sh 'docker-compose exec env_test pytest --cov=app --cov-report=html'
                 }
             }
         }
