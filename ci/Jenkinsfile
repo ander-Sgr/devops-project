@@ -6,17 +6,17 @@ pipeline {
     stages {
         stage('Checkout from scm') {
             steps {
-                 checkout scm 
+                checkout scm
             }
         }
         stage('Construir y correr el servicio de prueba') {
+            agent {
+                docker {
+                    image 'python:3.10-slim'
+                }
+            }
             steps {
-                agent {
-                    docker { image 'python:3.10-slim' }
-                }
-                steps {
-                    sh 'python --version'
-                }
+                sh 'python --version'
             }
         }
     }
