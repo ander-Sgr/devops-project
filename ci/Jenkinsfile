@@ -7,11 +7,10 @@ pipeline {
                  checkout scm 
             }
         }
-        stage('Ejecución de tests') {
+        stage('Construir y correr el servicio de prueba') {
             steps {
                 script {
-                    sh 'pip install -r requirements-test.txt'
-                    sh 'pytest --cov=app --cov-report=term-missing'
+                    sh 'make tests'
                 }
             }
         }
