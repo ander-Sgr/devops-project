@@ -10,13 +10,13 @@ pipeline {
             }
         }
         stage('Construir y correr el servicio de prueba') {
-            agent {
-                docker {
-                    image 'python:3.10-slim'
-                }
-            }
             steps {
-                sh 'python --version'
+                script {
+                    docker.image(DOCKER_IMAGE).inside {
+                        sh 'pip install -r requirements-test.txt'  // Instala las dependencias necesarias
+                        sh 'pytest --maxfail=1 --disable-warnings -q'  // Ejecuta los tests
+                    }
+                }
             }
         }
     }
