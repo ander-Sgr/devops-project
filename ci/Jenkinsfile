@@ -1,0 +1,12 @@
+pipelne {
+    agent any
+
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/ander-Sgr/devops-project.git'
+            }
+        }
+    }
+}
