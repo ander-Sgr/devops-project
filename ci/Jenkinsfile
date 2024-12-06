@@ -1,6 +1,8 @@
 pipeline {
     agent any
-
+    environment {
+        DOCKER_IMAGE = 'python:3.11'
+    }
     stages {
         stage('Checkout from scm') {
             steps {
@@ -10,8 +12,10 @@ pipeline {
         stage('Construir y correr el servicio de prueba') {
             steps {
                 script {
-                    sh 'docker-compose up -d --build env_test'
-                    sh 'docker-compose exec env_test pytest --cov=app --cov-report=html'
+                    docker.image(DOCKER_IMAGE).inside {
+                        sh 'pip install -r requirements-test.txt'
+                        sh 'pytest --maxfail=1 --disable-warnings -q'
+                    }
                 }
             }
         }
