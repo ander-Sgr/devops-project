@@ -34,3 +34,8 @@ def delete_data(id):
     db.session.delete(element_to_delete)
     db.session.commit()
     return {"message": "Data deleted successfully"}
+
+
+def test():
+    test = 4
+    return test
