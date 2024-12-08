@@ -39,3 +39,7 @@ def delete_data(id):
 def funcion4():
     print("hola4")
     return "hola4"
+
+def funcion5():
+    print("hola5")
+    return "hola5"
