@@ -11,6 +11,9 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout scm
+                script {
+                    echo "Current branch: ${env.GIT_BRANCH}"
+                }
             }
         }
         stage('Test') {
@@ -29,6 +32,9 @@ pipeline {
             }
         }
         stage('Push Docker Image') {
+            when {
+                branch 'develop'
+            }
             steps {
                 script {
                     def app = docker.build("${REGISTRY}/${IMAGE_NAME}:${env.BUILD_NUMBER}")
