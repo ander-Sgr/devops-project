@@ -1,7 +1,9 @@
 pipeline {
     agent any
     environment {
-         DOCKER_IMAGE = 'envdev:latest'
+        DOCKER_IMAGE = 'envdev:latest'
+        REGISTRY_URL = ' https://registry.hub.docker.com'
+        REGISTRY_CREDENTIALS_ID = 'docker-hub-credentials'
     }
     stages {
         stage('Checkout from scm') {
@@ -9,7 +11,7 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Construir y correr el servicio de prueba') {
+        stage('Run Tests') {
             agent {
                 docker { image "${DOCKER_IMAGE}" }
             }
@@ -17,12 +19,34 @@ pipeline {
                 sh 'pytest --cov=app tests/'
             }
         }
-        stage('Build') {
-            when {
-                branch 'develop'
+        stage('Linting') {
+            agent {
+                docker { image "${DOCKER_IMAGE}" }
             }
             steps {
-                echo 'Building the project...'
+                sh '''
+                    pip install flake8
+                    flake8 app/
+                '''
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    docker.build("${DOCKER_IMAGE}")
+                }
+            }
+        }
+        stage('Push Docker Image') {
+            when {
+                branch pattern: "^(develop|master|main)$", comparator: "REGEXP"
+            }
+            steps {
+                script {
+                    docker.withRegistry("${REGISTRY_URL}", "${REGISTRY_CREDENTIALS_ID}") {
+                        docker.image("${DOCKER_IMAGE}").push()
+                    }
+                }
             }
         }
     }
