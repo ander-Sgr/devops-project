@@ -42,3 +42,7 @@ def funcion():
 def funcion2():
     print("hola2")
     return "hola2"
+
+def funcion3():
+    print("hola3")
+    return "hola3"
