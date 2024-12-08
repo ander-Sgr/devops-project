@@ -35,14 +35,7 @@ def delete_data(id):
     db.session.commit()
     return {"message": "Data deleted successfully"}
 
-def funcion():
-    print("hola")
-    return "hola"
 
-def funcion2():
-    print("hola2")
-    return "hola2"
-
-def funcion3():
-    print("hola3")
-    return "hola3"
+def funcion4():
+    print("hola4")
+    return "hola4"
