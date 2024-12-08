@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         REGISTRY = 'andersgr'
-        IMAGE_NAME = 'myproject'
+        IMAGE_NAME = 'env-image'
         DOCKER_CREDENTIALS_ID = 'docker-hub-credentials'
     }
 
