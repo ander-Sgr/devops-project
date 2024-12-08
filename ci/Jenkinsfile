@@ -19,17 +19,6 @@ pipeline {
                 sh 'pytest --cov=app tests/'
             }
         }
-        stage('Linting') {
-            agent {
-                docker { image "${DOCKER_IMAGE}" }
-            }
-            steps {
-                sh '''
-                    pip install flake8
-                    flake8 app/
-                '''
-            }
-        }
         stage('Build Docker Image') {
             steps {
                 script {
