@@ -38,3 +38,7 @@ def delete_data(id):
 def funcion():
     print("hola")
     return "hola"
+
+def funcion2():
+    print("hola2")
+    return "hola2"
