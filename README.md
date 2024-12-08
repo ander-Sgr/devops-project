@@ -18,10 +18,6 @@ Básicamente el entorno está compuesto por 3 servicios gestionados en `docker-c
 - **Flask:** Framework web para Python.
 - **PostgreSQL:** Base de datos relacional.
 - **Docker Compose:** Orquestación de servicios para desarrollo local.
-  
-### Diagrama de la arquitectura
-TODO
-
 
 ## 3. Inicializar entorno de desarrollo.
 
@@ -64,3 +60,20 @@ Lo que hará es borrarte los volumenes monstados que y la redes creadas por dock
 ```bash
 make clean
 ```
+
+## 6. Modelo Colaborativo
+
+Para contribuir en el proyecto nos baseremos en el flujo **Gitflow** 
+
+Por lo que usarmeos el modelo de ramas siguiente
+
+- `main`: Rama principal, siempre estable.
+- `develop`: Rama de integración para nuevas funcionalidades.
+- `feature/<nombre>`Esta se crea desde develop y se fusiona en develop. Se usa para desarrollar nuevas características.
+- `release/<version>` Esta rama se prepara para hacer un despliegue a producción y se crea desde develop, y se fusiona tanto en develop como en main
+- `hotfix<nombre>` Se usa para corregir errores críticos en producción. Se crea desde main y se fusiona tanto en main como en develop.
+
+## Recursos adicionales
+
+- [Documentación oficial de Flask](https://flask.palletsprojects.com/en/latest/)
+- [Guía oficial de Docker Compose](https://docs.docker.com/compose/)
