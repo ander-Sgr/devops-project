@@ -29,9 +29,6 @@ pipeline {
             }
         }
         stage('Push Docker Image') {
-            when {
-                branch 'develop'
-            }
             steps {
                 script {
                     def app = docker.build("${REGISTRY}/${IMAGE_NAME}:${env.BUILD_NUMBER}")
