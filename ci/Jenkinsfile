@@ -33,7 +33,9 @@ pipeline {
         }
         stage('Push Docker Image') {
             when {
-                branch '*/develop'
+                expression {
+                    return env.GIT_BRANCH == 'origin/develop'
+                }
             }
             steps {
                 script {
