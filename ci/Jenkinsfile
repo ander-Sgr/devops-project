@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         DOCKER_IMAGE = 'envdev:latest'
-        REGISTRY_URL = ' https://registry.hub.docker.com'
+        DOCKER_TAG = 'latest'
         REGISTRY_CREDENTIALS_ID = 'docker-hub-credentials'
     }
     stages {
@@ -39,7 +39,7 @@ pipeline {
         }
         stage('Push Docker Image') {
             when {
-                branch pattern: "^(develop|master|main)$", comparator: "REGEXP"
+                branch 'develop'
             }
             steps {
                 script {
