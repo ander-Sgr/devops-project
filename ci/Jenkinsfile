@@ -2,15 +2,15 @@ pipeline {
     agent any
 
     environment {
-        REGISTRY = 'andersgr' // Tu usuario en Docker Hub
-        IMAGE_NAME = 'myproject' // Nombre de la imagen
-        DOCKER_CREDENTIALS_ID = 'docker-hub-credentials' // ID único de credenciales
+        REGISTRY = 'andersgr'
+        IMAGE_NAME = 'myproject'
+        DOCKER_CREDENTIALS_ID = 'docker-hub-credentials'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'develop', url: 'https://github.com/user/repo.git'
+                checkout scm
             }
         }
         stage('Lint') {
