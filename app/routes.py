@@ -39,3 +39,8 @@ def delete_data(id):
 def test():
     test = 4
     return test
+
+
+def test2():
+    test = 4
+    return test
