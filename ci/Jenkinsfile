@@ -1,19 +1,29 @@
 pipeline {
     agent any
+
     environment {
-        DOCKER_IMAGE = 'envdev:latest'
-         DOCKER_TAG = 'latest'
-        REGISTRY_CREDENTIALS_ID = 'docker-hub-credentials'
+        REGISTRY = 'andersgr' // Tu usuario en Docker Hub
+        IMAGE_NAME = 'myproject' // Nombre de la imagen
+        DOCKER_CREDENTIALS_ID = 'docker-hub-credentials' // ID único de credenciales
     }
+
     stages {
-        stage('Checkout from scm') {
+        stage('Checkout') {
             steps {
-                checkout scm
+                git branch: 'develop', url: 'https://github.com/user/repo.git'
             }
         }
-        stage('Run Tests') {
+        stage('Lint') {
             agent {
-                docker { image "${DOCKER_IMAGE}" }
+                docker { image 'envdev:latest' }
+            }
+            steps {
+                sh 'flake8 app/ tests/'
+            }
+        }
+        stage('Test') {
+            agent {
+                docker { image 'envdev:latest' }
             }
             steps {
                 sh 'pytest --cov=app tests/'
@@ -21,20 +31,19 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-                script {
-                    docker.build("${DOCKER_IMAGE}")
-                }
+                sh 'docker build -t ${REGISTRY}/${IMAGE_NAME}:${env.BUILD_NUMBER} .'
             }
         }
         stage('Push Docker Image') {
             when {
-                branch 'develop'
+                branch develop
             }
             steps {
-                script {
-                    docker.withRegistry("${REGISTRY_URL}", "${REGISTRY_CREDENTIALS_ID}") {
-                        docker.image("${DOCKER_IMAGE}").push()
-                    }
+                withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    sh '''
+                        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+                        docker push ${REGISTRY}/${IMAGE_NAME}:${env.BUILD_NUMBER}
+                    '''
                 }
             }
         }
