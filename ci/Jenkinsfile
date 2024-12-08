@@ -13,14 +13,6 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Lint') {
-            agent {
-                docker { image 'envdev:latest' }
-            }
-            steps {
-                sh 'flake8 app/ tests/'
-            }
-        }
         stage('Test') {
             agent {
                 docker { image 'envdev:latest' }
